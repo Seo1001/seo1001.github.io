@@ -62,9 +62,9 @@ export function ExpoRecommender({ userScores, recommendations, totalScore }) {
     <section class="container expo-recommender">
       <div class="recommend-head">
         <div>
-          <p class="page-intro__eyebrow">CSV Score Recommendation</p>
+          <p class="page-intro__eyebrow">
           <h2>내 점수로 섬 추천받기</h2>
-          <p>다섯 항목에 총 25점을 배분하면, 입력 점수에 구간별 가중치를 적용해 여수세계섬박람회 섬을 추천합니다.</p>
+          <p>다섯 항목에 25점을 배분하면, 입력 점수에 구간별 가중치를 적용해 여수세계섬박람회 섬을 추천합니다.</p>
         </div>
         <div class="score-total ${isValid ? "is-valid" : "is-invalid"}">
           <span>사용 점수</span>
