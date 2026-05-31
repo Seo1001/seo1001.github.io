@@ -1,4 +1,4 @@
-import { islands, regions, types } from "./data/islands.js";
+import { accesses, islands, regions, seasons, stays, types } from "./data/islands.js";
 import { filterIslands, getRandomIsland } from "./utils/filter.js";
 import { Header } from "./components/Header.js";
 import { Sidebar } from "./components/Sidebar.js";
@@ -19,7 +19,9 @@ const state = {
     query: "",
     region: "전체",
     type: "전체",
-    ferry: "전체"
+    access: "전체",
+    season: "전체",
+    stay: "전체"
   },
   randomIsland: getRandomIsland(islands),
   sidebarCollapsed: true,
@@ -30,6 +32,10 @@ const state = {
     nature: 5,
     convenience: 5
   }
+};
+
+const searchInputState = {
+  isComposing: false
 };
 
 function getRoute() {
@@ -78,14 +84,14 @@ function renderExpo() {
   const recommendations = totalScore === 25 ? getExpoRecommendations() : [];
   const expoIslands = filterIslands(
     islands.filter((island) => island.expo2026),
-    { query: "", region: "전체", type: "전체", ferry: "전체" }
+    { query: "", region: "전체", type: "전체", access: "전체", season: "전체", stay: "전체" }
   );
 
   app.innerHTML = layout(
     `
       ${PageIntro({
         eyebrow: "Yeosu World Island Expo 2026",
-        title: "여수섬박람회",
+        title: "여수세계섬박람회",
         copy: "2026여수세계섬박람회와 연결되는 12개 섬을 한곳에서 살펴보세요."
       })}
       ${ExpoInfo()}
@@ -94,7 +100,7 @@ function renderExpo() {
           <div class="result-head">
             <div>
               <h2>박람회 섬 12선</h2>
-              <p class="result-count">총 ${expoIslands.length}개의 여수섬박람회 섬을 찾았습니다.</p>
+              <p class="result-count">총 ${expoIslands.length}개의 여수세계섬박람회 섬을 찾았습니다.</p>
             </div>
           </div>
           ${IslandList(expoIslands)}
@@ -119,7 +125,7 @@ function renderSearchPage({ currentPage, intro, filters, afterResults = "" }) {
     `
       ${intro}
       <main id="results" class="container main-grid">
-        ${FilterPanel({ islands, regions, types, filters })}
+        ${FilterPanel({ islands, regions, types, accesses, seasons, stays, filters })}
         <section class="results" aria-live="polite">
           <div class="result-head">
             <div>
@@ -208,7 +214,7 @@ function footer() {
 }
 
 function goHome() {
-  state.filters = { query: "", region: "전체", type: "전체", ferry: "전체" };
+  state.filters = { query: "", region: "전체", type: "전체", access: "전체", season: "전체", stay: "전체" };
 
   if (window.location.hash === "#/" || window.location.hash === "") {
     renderHome();
@@ -227,10 +233,32 @@ function bindSearchEvents(currentPage) {
   const queryInput = document.querySelector("[data-field='query']");
   const suggestions = document.querySelector("[data-role='suggestions']");
 
+  const renderAfterSearchInput = (value) => {
+    state.filters.query = value;
+    render();
+
+    const nextInput = document.querySelector("[data-field='query']");
+    if (!nextInput) return;
+
+    nextInput.focus();
+    nextInput.setSelectionRange(nextInput.value.length, nextInput.value.length);
+  };
+
+  queryInput.addEventListener("compositionstart", () => {
+    searchInputState.isComposing = true;
+  });
+
+  queryInput.addEventListener("compositionend", (event) => {
+    searchInputState.isComposing = false;
+    renderAfterSearchInput(event.target.value);
+  });
+
   queryInput.addEventListener("input", (event) => {
     state.filters.query = event.target.value;
-    render();
-    document.querySelector("[data-field='query']").focus();
+
+    if (searchInputState.isComposing || event.isComposing) return;
+
+    renderAfterSearchInput(event.target.value);
   });
 
   queryInput.addEventListener("focus", () => {
@@ -242,8 +270,18 @@ function bindSearchEvents(currentPage) {
     render();
   });
 
-  document.querySelector("[data-field='ferry']").addEventListener("change", (event) => {
-    state.filters.ferry = event.target.value;
+  document.querySelector("[data-field='access']").addEventListener("change", (event) => {
+    state.filters.access = event.target.value;
+    render();
+  });
+
+  document.querySelector("[data-field='season']").addEventListener("change", (event) => {
+    state.filters.season = event.target.value;
+    render();
+  });
+
+  document.querySelector("[data-field='stay']").addEventListener("change", (event) => {
+    state.filters.stay = event.target.value;
     render();
   });
 
@@ -270,7 +308,9 @@ function bindSearchEvents(currentPage) {
       query: "",
       region: "전체",
       type: "전체",
-      ferry: "전체"
+      access: "전체",
+      season: "전체",
+      stay: "전체"
     };
     render();
   });

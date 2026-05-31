@@ -1,9 +1,8 @@
 import { SearchBar } from "./SearchBar.js";
 
-export function FilterPanel({ islands, regions, types, filters }) {
-  const regionOptions = regions
-    .map((region) => `<option value="${region}" ${filters.region === region ? "selected" : ""}>${region}</option>`)
-    .join("");
+export function FilterPanel({ islands, regions, types, accesses, seasons, stays, filters }) {
+  const createOptions = (items, selectedValue) =>
+    items.map((item) => `<option value="${item}" ${selectedValue === item ? "selected" : ""}>${item}</option>`).join("");
 
   const typeChips = types
     .map(
@@ -22,7 +21,7 @@ export function FilterPanel({ islands, regions, types, filters }) {
       <div class="filter-group">
         <label for="region-filter">지역</label>
         <select id="region-filter" class="select" data-field="region">
-          ${regionOptions}
+          ${createOptions(regions, filters.region)}
         </select>
       </div>
       <div class="filter-group">
@@ -32,11 +31,21 @@ export function FilterPanel({ islands, regions, types, filters }) {
         </div>
       </div>
       <div class="filter-group">
-        <label for="ferry-filter">이동 방식</label>
-        <select id="ferry-filter" class="select" data-field="ferry">
-          <option value="전체" ${filters.ferry === "전체" ? "selected" : ""}>전체</option>
-          <option value="여객선" ${filters.ferry === "여객선" ? "selected" : ""}>여객선 필요</option>
-          <option value="차량/항공" ${filters.ferry === "차량/항공" ? "selected" : ""}>차량/항공 접근</option>
+        <label for="access-filter">이동 수단</label>
+        <select id="access-filter" class="select" data-field="access">
+          ${createOptions(accesses, filters.access)}
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="season-filter">추천 시기</label>
+        <select id="season-filter" class="select" data-field="season">
+          ${createOptions(seasons, filters.season)}
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="stay-filter">체류 일정</label>
+        <select id="stay-filter" class="select" data-field="stay">
+          ${createOptions(stays, filters.stay)}
         </select>
       </div>
       <div class="filter-group">

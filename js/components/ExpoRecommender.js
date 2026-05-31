@@ -1,5 +1,5 @@
 const scoreFields = [
-  { key: "congestion", label: "혼잡도 낮음", hint: "한적한 섬을 중요하게 볼수록 높게 배분" },
+  { key: "congestion", label: "활성도", hint: "유명 관광지일수록 높은 점수" },
   { key: "activity", label: "액티비티", hint: "트레킹, 체험, 즐길 거리" },
   { key: "accessibility", label: "접근성", hint: "이동이 쉬운 섬" },
   { key: "nature", label: "자연경관", hint: "풍경과 해상 경관" },
@@ -39,7 +39,7 @@ export function ExpoRecommender({ userScores, recommendations, totalScore }) {
                 <h3>${island.name}</h3>
                 <p>${island.summary}</p>
                 <div class="mini-score">
-                  <span>혼잡 ${island.scores.congestion}</span>
+                  <span>활성 ${island.scores.congestion}</span>
                   <span>활동 ${island.scores.activity}</span>
                   <span>접근 ${island.scores.accessibility}</span>
                   <span>자연 ${island.scores.nature}</span>
@@ -64,7 +64,7 @@ export function ExpoRecommender({ userScores, recommendations, totalScore }) {
         <div>
           <p class="page-intro__eyebrow">CSV Score Recommendation</p>
           <h2>내 점수로 섬 추천받기</h2>
-          <p>다섯 항목에 총 25점을 배분하면, 입력 점수에 구간별 가중치를 적용해 여수섬박람회 섬을 추천합니다.</p>
+          <p>다섯 항목에 총 25점을 배분하면, 입력 점수에 구간별 가중치를 적용해 여수세계섬박람회 섬을 추천합니다.</p>
         </div>
         <div class="score-total ${isValid ? "is-valid" : "is-invalid"}">
           <span>사용 점수</span>

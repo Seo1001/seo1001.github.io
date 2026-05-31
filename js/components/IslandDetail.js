@@ -12,9 +12,12 @@ export function IslandDetail(island) {
   }
 
   const tags = island.keywords.map((keyword) => `<span class="tag">${keyword}</span>`).join("");
+  const kakaoMapLink = island.location
+    ? `https://map.kakao.com/link/map/${encodeURIComponent(island.name)},${island.location.lat},${island.location.lng}`
+    : `https://map.kakao.com/?q=${encodeURIComponent(island.name)}`;
   const expoBadge = island.expo2026 ? `<span class="expo-badge">2026 여수세계섬박람회 연계 섬</span>` : "";
   const scoreLabels = {
-    congestion: "혼잡도",
+    congestion: "활성도",
     activity: "액티비티",
     accessibility: "접근성",
     nature: "자연경관",
@@ -66,7 +69,7 @@ export function IslandDetail(island) {
                 <span>카카오맵 API 키를 설정하면 이곳에 ${island.name} 위치가 표시됩니다.</span>
               </div>
             </div>
-            <a class="button button--ghost" href="https://map.kakao.com/?q=${encodeURIComponent(island.name)}" target="_blank" rel="noreferrer">
+            <a class="button button--ghost" href="${kakaoMapLink}" target="_blank" rel="noreferrer">
               카카오맵에서 열기
             </a>
           </div>

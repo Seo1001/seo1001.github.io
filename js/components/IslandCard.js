@@ -3,7 +3,7 @@ export function IslandCard(island) {
     .slice(0, 3)
     .map((keyword) => `<span class="tag">${keyword}</span>`)
     .join("");
-  const expoBadge = island.expo2026 ? `<span class="expo-badge">2026 여수섬박람회</span>` : "";
+  const expoBadge = island.expo2026 ? `<span class="expo-badge">2026 여수세계섬박람회</span>` : "";
 
   return `
     <article class="island-card">

@@ -3,11 +3,11 @@ export function ExpoInfo() {
     <section class="expo-info">
       <div class="container expo-info__inner">
         <div>
-          <p class="expo-info__eyebrow">2026 Yeosu World Island Expo</p>
-          <h2>섬과 바다를 주제로 여수를 다시 발견하는 박람회</h2>
+          <p class="expo-info__eyebrow">
+          <h2>섬, 바다와 미래를 잇다</h2>
           <p>
             2026여수세계섬박람회는 여수의 섬, 해양 생태, 섬 주민의 삶과 문화를 함께 조명하는 국제 행사입니다.
-            K-Some에서는 박람회와 연결되는 12개 섬을 별도 지역으로 분류해, 여행자가 섬별 접근성·혼잡도·자연경관·액티비티를
+            K-Some에서는 박람회와 연결되는 12개 섬을 별도 지역으로 분류해, 여행자가 섬별 접근성·활성도·자연경관·액티비티를
             한눈에 비교할 수 있도록 구성했습니다.
           </p>
         </div>

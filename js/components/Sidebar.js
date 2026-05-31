@@ -14,7 +14,7 @@ export function Sidebar(isCollapsed = false, currentPage = "home") {
         </a>
         <a class="sidebar-link sidebar-link--expo ${active("expo")}" href="#/expo">
           <span class="sidebar-link__icon">★</span>
-          <span class="sidebar-link__text">여수섬박람회</span>
+          <span class="sidebar-link__text">여수세계섬박람회</span>
         </a>
       </nav>
     </aside>
