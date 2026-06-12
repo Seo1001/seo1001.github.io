@@ -20,7 +20,23 @@ export function ExpoRecommender({ userScores, recommendations, totalScore }) {
           </span>
           <div class="range-row">
             <input type="range" min="1" max="10" step="1" value="${userScores[key]}" data-action="expo-score" data-score-key="${key}" />
-            <output>${userScores[key]}점</output>
+            <div class="score-stepper">
+              <input
+                class="score-number"
+                type="number"
+                min="1"
+                max="10"
+                step="1"
+                value="${userScores[key]}"
+                aria-label="${label} 점수"
+                data-action="expo-score"
+                data-score-key="${key}"
+              />
+              <div class="score-stepper__buttons" aria-hidden="false">
+                <button type="button" data-action="expo-score-step" data-score-key="${key}" data-score-step="1" aria-label="${label} 1점 올리기">+</button>
+                <button type="button" data-action="expo-score-step" data-score-key="${key}" data-score-step="-1" aria-label="${label} 1점 내리기">-</button>
+              </div>
+            </div>
           </div>
         </label>
       `

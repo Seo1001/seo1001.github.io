@@ -1,3 +1,3 @@
-// 카카오 개발자 콘솔에서 발급한 JavaScript 키를 넣으면 상세 페이지 지도가 활성화됩니다.
-// 예: export const KAKAO_MAP_API_KEY = "발급받은_JavaScript_키";
-export const KAKAO_MAP_API_KEY = "307f0e5865f9e0b312726f3d8ea328a9";
+// GitHub에 올려도 안전한 공개 설정 파일입니다.
+// 실제 카카오 JavaScript 키는 같은 폴더의 kakao.local.js에 넣어 사용하세요.
+export const KAKAO_MAP_API_KEY = "";

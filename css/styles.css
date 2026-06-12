@@ -307,7 +307,7 @@ button {
 .expo-info__facts dd {
   margin: 8px 0 0;
   color: var(--charcoal);
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 900;
 }
 
@@ -531,7 +531,7 @@ button {
 
 .range-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 48px;
+  grid-template-columns: minmax(0, 1fr) 92px;
   align-items: center;
   gap: 10px;
 }
@@ -539,6 +539,75 @@ button {
 .range-row input[type="range"] {
   width: 100%;
   accent-color: var(--ocean-blue);
+}
+
+.score-stepper {
+  min-height: 40px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 30px;
+  overflow: hidden;
+  border: 1px solid #b7d5fb;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #ffffff 0%, #edf5ff 100%);
+  box-shadow: 0 8px 18px rgba(26, 115, 232, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.score-number {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ocean-dark);
+  font-size: 15px;
+  font-weight: 900;
+  text-align: center;
+  outline: none;
+  -moz-appearance: textfield;
+}
+
+.score-number::-webkit-outer-spin-button,
+.score-number::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+.score-number:focus {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.score-stepper:focus-within {
+  border-color: var(--ocean-blue);
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.14);
+}
+
+.score-stepper__buttons {
+  display: grid;
+  border-left: 1px solid #b7d5fb;
+}
+
+.score-stepper__buttons button {
+  min-width: 30px;
+  min-height: 20px;
+  border: 0;
+  background: #e4f0ff;
+  color: var(--ocean-dark);
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1;
+  transition: background 0.16s ease, color 0.16s ease, transform 0.16s ease;
+}
+
+.score-stepper__buttons button + button {
+  border-top: 1px solid #b7d5fb;
+}
+
+.score-stepper__buttons button:hover {
+  background: var(--ocean-blue);
+  color: var(--white);
+}
+
+.score-stepper__buttons button:active {
+  transform: scale(0.94);
 }
 
 .range-row output {
@@ -939,6 +1008,10 @@ button {
 
 .meta-list b {
   color: var(--muted);
+}
+
+.island-card .button {
+  margin-top: 14px;
 }
 
 .empty-state {

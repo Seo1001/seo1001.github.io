@@ -5,13 +5,14 @@ import { Sidebar } from "./components/Sidebar.js";
 import { Motivation } from "./components/Motivation.js";
 import { PageIntro } from "./components/PageIntro.js";
 import { ExpoInfo } from "./components/ExpoInfo.js";
-import { ExpoRecommender } from "./components/ExpoRecommender.js";
+import { ExpoRecommender } from "./components/ExpoRecommender.js?v=20260613-expo-readability";
 import { FilterPanel } from "./components/FilterPanel.js";
 import { IslandList } from "./components/IslandList.js";
 import { IslandDetail } from "./components/IslandDetail.js";
-import { KAKAO_MAP_API_KEY } from "./config/kakao.js";
 
 const app = document.querySelector("#app");
+let kakaoMapApiKey = "";
+let kakaoConfigPromise = null;
 
 // 화면 상태는 한 곳에서 관리해 컴포넌트 렌더링을 예측 가능하게 유지합니다.
 const state = {
@@ -351,8 +352,22 @@ function getExpoRecommendations() {
     .slice(0, 3);
 }
 
-function loadKakaoMapSdk() {
-  if (!KAKAO_MAP_API_KEY) return Promise.resolve(false);
+async function loadKakaoMapConfig() {
+  if (!kakaoConfigPromise) {
+    kakaoConfigPromise = import("./config/kakao.local.js")
+      .catch(() => import("./config/kakao.js"))
+      .then((config) => {
+        kakaoMapApiKey = config.KAKAO_MAP_API_KEY ?? "";
+        return kakaoMapApiKey;
+      });
+  }
+
+  return kakaoConfigPromise;
+}
+
+async function loadKakaoMapSdk() {
+  const apiKey = await loadKakaoMapConfig();
+  if (!apiKey) return false;
   if (window.kakao?.maps) return Promise.resolve(true);
 
   return new Promise((resolve, reject) => {
@@ -364,7 +379,7 @@ function loadKakaoMapSdk() {
     }
 
     const script = document.createElement("script");
-    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_API_KEY}&autoload=false`;
+    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=false`;
     script.async = true;
     script.dataset.kakaoMapSdk = "true";
     script.onload = () => resolve(true);
@@ -377,7 +392,7 @@ async function initIslandMap(island) {
   const mapElement = document.querySelector("#island-map");
   if (!mapElement || !island?.location) return;
 
-  if (!KAKAO_MAP_API_KEY) {
+  if (!(await loadKakaoMapConfig())) {
     mapElement.classList.add("is-placeholder");
     return;
   }
@@ -421,6 +436,15 @@ document.addEventListener("click", (event) => {
     renderRandom();
   }
 
+  if (actionTarget.dataset.action === "expo-score-step") {
+    event.preventDefault();
+    const key = actionTarget.dataset.scoreKey;
+    const step = Number(actionTarget.dataset.scoreStep) || 0;
+    const currentValue = state.expoUserScores[key] ?? 1;
+    state.expoUserScores[key] = Math.min(10, Math.max(1, currentValue + step));
+    renderExpo();
+  }
+
 });
 
 document.addEventListener("input", (event) => {
@@ -428,10 +452,45 @@ document.addEventListener("input", (event) => {
   if (!inputTarget) return;
 
   const key = inputTarget.dataset.scoreKey;
+  const rawValue = Number(inputTarget.value);
+  if (inputTarget.type === "number" && !rawValue) return;
+
+  const value = Math.min(10, Math.max(1, rawValue || 1));
+  state.expoUserScores[key] = value;
+
+  if (inputTarget.type === "number") {
+    const relatedRange = document.querySelector(`input[type="range"][data-score-key="${key}"]`);
+    const scoreTotal = document.querySelector(".score-total");
+    if (relatedRange) relatedRange.value = value;
+    if (scoreTotal) {
+      const totalScore = getExpoUserScoreTotal();
+      scoreTotal.classList.toggle("is-valid", totalScore === 25);
+      scoreTotal.classList.toggle("is-invalid", totalScore !== 25);
+      scoreTotal.querySelector("strong").textContent = `${totalScore} / 25`;
+    }
+    return;
+  }
+
+  inputTarget.value = value;
+  renderExpo();
+});
+
+document.addEventListener("change", (event) => {
+  const inputTarget = event.target.closest("[data-action='expo-score']");
+  if (!inputTarget || inputTarget.type !== "number") return;
+
+  const key = inputTarget.dataset.scoreKey;
   const value = Math.min(10, Math.max(1, Number(inputTarget.value) || 1));
   state.expoUserScores[key] = value;
   inputTarget.value = value;
   renderExpo();
+});
+
+document.addEventListener("keydown", (event) => {
+  const inputTarget = event.target.closest("[data-action='expo-score']");
+  if (!inputTarget || inputTarget.type !== "number" || event.key !== "Enter") return;
+
+  inputTarget.blur();
 });
 
 window.addEventListener("hashchange", render);
